@@ -1,0 +1,12 @@
+body {
+    background-color: grey;
+}
+
+App {
+    position: relative;
+    background: #1f1144;
+}
+
+  canvas {
+    height: 1000px;
+  }
