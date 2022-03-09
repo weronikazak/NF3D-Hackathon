@@ -117,13 +117,13 @@ def visualize_grid(model, dataloader, attributes, device, show_cn_matrices=True,
     with torch.no_grad():
         for batch in dataloader:
             img = batch['img']
-            gt_background = batch['labels']['color_labels']
+            gt_backgrounds = batch['labels']['background_labels']
             gt_clothes = batch['labels']['clothes_labels']
-            gt_earring = batch['labels']['earring_labels']
+            gt_earrings = batch['labels']['earring_labels']
             gt_eyes = batch['labels']['eyes_labels']
-            gt_fur = batch['labels']['fur_labels']
-            gt_hat = batch['labels']['hat_labels']
-            gt_mouth = batch['labels']['mouth_labels']
+            gt_furs = batch['labels']['fur_labels']
+            gt_hats = batch['labels']['hat_labels']
+            gt_mouths = batch['labels']['mouth_labels']
             output = model(img.to(device))
 
             batch_accuracy_background, batch_accuracy_clothes, batch_accuracy_earring, batch_accuracy_eyes, batch_accuracy_fur, batch_accuracy_hat, batch_accuracy_mouth = \
@@ -165,7 +165,7 @@ def visualize_grid(model, dataloader, attributes, device, show_cn_matrices=True,
                 gt_hat = attributes.hat_id_to_name[gt_hats[i].item()]
                 gt_mouth = attributes.mouth_id_to_name[gt_mouths[i].item()]
 
-                gt_background_all.append(gt_color)
+                gt_background_all.append(gt_backgrounds)
                 gt_clothes_all.append(gt_cloth)
                 gt_earring_all.append(gt_earring)
                 gt_eyes_all.append(gt_eye)
@@ -199,50 +199,117 @@ def visualize_grid(model, dataloader, attributes, device, show_cn_matrices=True,
 
     # Draw confusion matrices
     # if show_cn_matrices:
-    #     # color
-    #     cn_matrix = confusion_matrix(
-    #         y_true=gt_color_all,
-    #         y_pred=predicted_color_all,
-    #         labels=attributes.color_labels,
-    #         normalize='true')
-    #     ConfusionMatrixDisplay(cn_matrix, attributes.color_labels).plot(
-    #         include_values=False, xticks_rotation='vertical')
-    #     plt.title("Colors")
-    #     plt.tight_layout()
-    #     plt.show()
+        # Background
+        # cn_matrix = confusion_matrix(
+        #     y_true=gt_background_all,
+        #     y_pred=predicted_background_all,
+        #     labels=attributes.background_labels,
+        #     normalize='true')
+        # plt.rcParams.update({'font.size': 1.8})
+        # plt.rcParams.update({'figure.dpi': 300})
+        # ConfusionMatrixDisplay(cn_matrix, attributes.background_labels).plot(
+        #     include_values=False, xticks_rotation='vertical')
+        # plt.rcParams.update({'figure.dpi': 100})
+        # plt.rcParams.update({'font.size': 5})
+        # plt.title("Background")
+        # plt.show()
 
-    #     # gender
-    #     cn_matrix = confusion_matrix(
-    #         y_true=gt_gender_all,
-    #         y_pred=predicted_gender_all,
-    #         labels=attributes.gender_labels,
-    #         normalize='true')
-    #     ConfusionMatrixDisplay(cn_matrix, attributes.gender_labels).plot(
-    #         xticks_rotation='horizontal')
-    #     plt.title("Genders")
-    #     plt.tight_layout()
-    #     plt.show()
+        # # Clothes
+        # cn_matrix = confusion_matrix(
+        #     y_true=gt_clothes_all,
+        #     y_pred=predicted_clothes_all,
+        #     labels=attributes.clothes_labels,
+        #     normalize='true')
+        # plt.rcParams.update({'font.size': 1.8})
+        # plt.rcParams.update({'figure.dpi': 300})
+        # ConfusionMatrixDisplay(cn_matrix, attributes.clothes_labels).plot(
+        #     include_values=False, xticks_rotation='vertical')
+        # plt.rcParams.update({'figure.dpi': 100})
+        # plt.rcParams.update({'font.size': 5})
+        # plt.title("Clothes")
+        # plt.show()
 
-    #     # Uncomment code below to see the article confusion matrix (it may be too big to display)
-    #     cn_matrix = confusion_matrix(
-    #         y_true=gt_article_all,
-    #         y_pred=predicted_article_all,
-    #         labels=attributes.article_labels,
-    #         normalize='true')
-    #     plt.rcParams.update({'font.size': 1.8})
-    #     plt.rcParams.update({'figure.dpi': 300})
-    #     ConfusionMatrixDisplay(cn_matrix, attributes.article_labels).plot(
-    #         include_values=False, xticks_rotation='vertical')
-    #     plt.rcParams.update({'figure.dpi': 100})
-    #     plt.rcParams.update({'font.size': 5})
-    #     plt.title("Article types")
-    #     plt.show()
+        # # Earring
+        # cn_matrix = confusion_matrix(
+        #     y_true=gt_earring_all,
+        #     y_pred=predicted_earring_all,
+        #     labels=attributes.earring_labels,
+        #     normalize='true')
+        # plt.rcParams.update({'font.size': 1.8})
+        # plt.rcParams.update({'figure.dpi': 300})
+        # ConfusionMatrixDisplay(cn_matrix, attributes.earring_labels).plot(
+        #     include_values=False, xticks_rotation='vertical')
+        # plt.rcParams.update({'figure.dpi': 100})
+        # plt.rcParams.update({'font.size': 5})
+        # plt.title("Earring")
+        # plt.show()
+
+        # # Eyes
+        # cn_matrix = confusion_matrix(
+        #     y_true=gt_eyes_all,
+        #     y_pred=predicted_eyes_all,
+        #     labels=attributes.eyes_labels,
+        #     normalize='true')
+        # plt.rcParams.update({'font.size': 1.8})
+        # plt.rcParams.update({'figure.dpi': 300})
+        # ConfusionMatrixDisplay(cn_matrix, attributes.eyes_labels).plot(
+        #     include_values=False, xticks_rotation='vertical')
+        # plt.rcParams.update({'figure.dpi': 100})
+        # plt.rcParams.update({'font.size': 5})
+        # plt.title("Eyes")
+        # plt.show()
+
+        # # Fur
+        # cn_matrix = confusion_matrix(
+        #     y_true=gt_fur_all,
+        #     y_pred=predicted_fur_all,
+        #     labels=attributes.fur_labels,
+        #     normalize='true')
+        # plt.rcParams.update({'font.size': 1.8})
+        # plt.rcParams.update({'figure.dpi': 300})
+        # ConfusionMatrixDisplay(cn_matrix, attributes.fur_labels).plot(
+        #     include_values=False, xticks_rotation='vertical')
+        # plt.rcParams.update({'figure.dpi': 100})
+        # plt.rcParams.update({'font.size': 5})
+        # plt.title("Fur")
+        # plt.show()
+
+        # # Hat
+        # cn_matrix = confusion_matrix(
+        #     y_true=gt_hat_all,
+        #     y_pred=predicted_hat_all,
+        #     labels=attributes.hat_labels,
+        #     normalize='true')
+        # plt.rcParams.update({'font.size': 1.8})
+        # plt.rcParams.update({'figure.dpi': 300})
+        # ConfusionMatrixDisplay(cn_matrix, attributes.hat_labels).plot(
+        #     include_values=False, xticks_rotation='vertical')
+        # plt.rcParams.update({'figure.dpi': 100})
+        # plt.rcParams.update({'font.size': 5})
+        # plt.title("Hat")
+        # plt.show()
+
+        # Mouth
+        # cn_matrix = confusion_matrix(
+        #     y_true=gt_mouth_all,
+        #     y_pred=predicted_mouth_all,
+        #     labels=attributes.mouth_labels,
+        #     normalize='true')
+        # plt.rcParams.update({'font.size': 1.8})
+        # plt.rcParams.update({'figure.dpi': 300})
+        # ConfusionMatrixDisplay(cn_matrix, attributes.mouth_labels).plot(
+        #     include_values=False, xticks_rotation='vertical')
+        # plt.rcParams.update({'figure.dpi': 100})
+        # plt.rcParams.update({'font.size': 5})
+        # plt.title("Mouth")
+        # plt.show()
+        
 
     if show_images:
         labels = gt_labels if show_gt else labels
         title = "Ground truth labels" if show_gt else "Predicted labels"
-        n_cols = 5
-        n_rows = 7
+        n_cols = 3
+        n_rows = 3
         fig, axs = plt.subplots(n_rows, n_cols, figsize=(10, 10))
         axs = axs.flatten()
         for img, ax, label in zip(imgs, axs, labels):
@@ -255,6 +322,7 @@ def visualize_grid(model, dataloader, attributes, device, show_cn_matrices=True,
         plt.show()
 
     model.train()
+    torch.save(model.state_dict(), checkpoint)
 
 
 def calculate_metrics(output, target):
@@ -312,7 +380,7 @@ if __name__ == '__main__':
     ])
 
     test_dataset = ApesDataset('./data/apes_val.csv', attributes, val_transform)
-    test_dataloader = DataLoader(test_dataset, batch_size=64, shuffle=False, num_workers=8)
+    test_dataloader = DataLoader(test_dataset, batch_size=64, shuffle=False, num_workers=4)
 
     model = MultiOutputModel(n_background_classes=attributes.num_backgrounds,
                              n_clothes_classes=attributes.num_clothes,
