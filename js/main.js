@@ -5,6 +5,8 @@ Moralis.start({ serverUrl, appId });
 const nft_contract_address = "0xb0Fd53DaE73DD0EDfE5E28ED29a472918eD60931" //NFT Minting Contract Use This One "Batteries Included", code of this contract is in the github repository under contract_base for your reference.
 
 const web3 = new Web3(window.ethereum);
+getNFTs();
+
 
 /** Add from here down */
 async function login() {
@@ -78,21 +80,30 @@ async function notify(_txt){
 async function getNFTs() {
     const testnetNFTs = await Moralis.Web3API.account.getNFTs({ chain: 'rinkeby' });
 
-    // html = "";
+    const hardcodedModels = [
+        "'rebel_ape'",
+        "'white_ape'",
+        "'dress_ape'",
+        "'pink_ape'"
+    ];
+    
     for (var i = 0; i < testnetNFTs["result"].length; i++) {
         var token_uri = testnetNFTs["result"][i]["token_uri"]
-        console.log(token_uri)
+
+        var j = 0;
         fetch(token_uri)
         .then(res => res.json())
             .then((out) => {
-                // console.log('Output: ', out["image"]);
-                // console.log(html)
                 document.getElementById("nft-gallery").innerHTML += `
                 <div class="btn nft-image">
-                    <img src='` + out["image"] + `' class="img-rounded" width="160px" height="160px">
+                    <img src='` + out["image"] + `' class="img-rounded" 
+                                                    width="160px"
+                                                    height="160px"
+                                                    onclick="loadModel(`+ hardcodedModels[j] +`)">
                     <label style="color:white">` + out["name"] + `</label> 
                     <br>
-                <div>`
+                <div>`;
+                j++;
         }).catch(err => console.error(err));
     }
     document.getElementById("nft-button").style.display = "none";

@@ -1,56 +1,69 @@
-var container, camera, scene, renderer, mesh,
+CANVAS_WIDTH = 600;
+CANVAS_HEIGHT = 600;
 
-mouse = { x: 0, y: 0 },
-objects = [],
+const canvas = document.getElementById( 'mycanvas' );
 
-count = 0,
-
-CANVAS_WIDTH = 1000,
-CANVAS_HEIGHT = 1000;
-
-canvas = document.getElementById( 'mycanvas' );
-renderer = new THREE.WebGLRenderer();
-renderer.setSize( CANVAS_WIDTH, CANVAS_HEIGHT );      
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize( CANVAS_WIDTH, CANVAS_HEIGHT ); 
+renderer.setClearColor(0x333333);
 canvas.appendChild( renderer.domElement );
 
 scene = new THREE.Scene();
 
-camera = new THREE.PerspectiveCamera( 50, CANVAS_WIDTH / CANVAS_HEIGHT, 1, 0 );
-camera.position.y = 0;
-camera.position.z = 0;
-camera.lookAt( scene.position );
+var camera = new THREE.PerspectiveCamera(1, 1, 1, 1000);
+camera.position.set(-150, 50, 260);
 
-const loader = new THREE.GLTFLoader();
+var controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-loader.load( 'models/white_ape/base.gltf', function ( gltf ) {
-
-	scene.add( gltf.scene );
-
-}, undefined, function ( error ) {
-
-	console.error( error );
-
-} );
-// objects.push( mesh );
-
-                    
-// find intersections
-var vector = new THREE.Vector3();
-var raycaster = new THREE.Raycaster();
+var light = new THREE.HemisphereLight( 0xffffff, 0x0fff, 1 );
+light.position.set(1, 1, 50);
+scene.add( light );
 
 
-function render() {
+function recreateScene() {
+    scene = new THREE.Scene();
 
-    // mesh.rotation.y += 0.01;
-    
-    renderer.render( scene, camera );
+    var camera = new THREE.PerspectiveCamera(1, 1, 1, 1000);
+    camera.position.set(-150, 50, 260);
+
+    var controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+    var light = new THREE.HemisphereLight( 0xffffff, 0x0fff, 1 );
+    light.position.set(1, 1, 50);
+    scene.add( light );
+}
+
+function loadModel(modelName) {
+    const loader = new THREE.GLTFLoader();
+    loader.load( 'models/'+ modelName + '/base.gltf', function ( gltf ) {
+        scene.add( gltf.scene );
+    }, undefined, function ( error ) {
+        console.error( error );
+    } );
+
+    // document.ge
+    recreateScene();
+    render();
 
 }
 
-(function animate() {
 
-    requestAnimationFrame( animate );
+function render() {
+  if (resize(renderer)) {
+    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+    camera.updateProjectionMatrix();
+  }
+  renderer.render(scene, camera);
+  requestAnimationFrame(render);
+}
 
-    render();
-
-})();
+function resize(renderer) {
+  const canvas = renderer.domElement;
+  const width = canvas.clientWidth;
+  const height = canvas.clientHeight;
+  const needResize = canvas.width !== width || canvas.height !== height;
+  if (needResize) {
+    renderer.setSize(width, height, false);
+  }
+  return needResize;
+}
