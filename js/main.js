@@ -13,17 +13,21 @@ const dummyApes = [8658, 6848, 5000, 2531];
 
 const web3 = new Web3(window.ethereum);
 getNFTs();
+attributes = [];
+
 
 function getNFTData(token_address, token_id) {
     const KEY = "ckey_773ccb8db17c4884a9ff935d884";
     var metadata = "https://api.covalenthq.com/v1/1/tokens/"+ token_address +"/nft_metadata/" + token_id + "/?quote-currency=USD&format=JSON&key=" + KEY;
-    
     attributes = [];
+    
     fetch(metadata)
         .then(res => res.json())
             .then((out) => {
                 var attributes_array = out["data"]["items"][0]["nft_data"][0]["external_data"]["attributes"];
-                detail_list = '<ul class="list-unstyled text-left"><li><a href="#"><b>Collection:</b> Bored Apes Club</a></li>';
+                detail_list = `<ul class="list-unstyled text-left">
+                <li id="nft-collection-name"><b>Collection:</b> Bored Apes Club</li>
+                <li id="nft-id"><b>Token ID:</b> ` + token_id +`</li>`;
 
                 for (var i = 0; i < attributes_array.length; i++) {
                     a = attributes_array[i];
@@ -64,24 +68,34 @@ async function logOut() {
 }
 
 async function upload(){
-    const fileInput = document.getElementById("model");
-    const data = fileInput.files[0];
-    const imageFile = new Moralis.File(data.name, data);
-    document.getElementById('upload').setAttribute("disabled", null);
-    // document.getElementById('file').setAttribute("disabled", null);
-    // document.getElementById('name').setAttribute("disabled", null);
-    // document.getElementById('description').setAttribute("disabled", null);
-    await imageFile.saveIPFS();
-    const imageURI = imageFile.ipfs();
-    const metadata = {
-      "name":document.getElementById("name").value,
-    //   "description":document.getElementById("description").value,
-      "image":imageURI
-    }
-    const metadataFile = new Moralis.File("metadata.json", {base64 : btoa(JSON.stringify(metadata))});
-    await metadataFile.saveIPFS();
-    const metadataURI = metadataFile.ipfs();
-    const txt = await mintToken(metadataURI).then(notify)
+    var gltfExporter = new THREE.GLTFExporter();
+    gltfExporter.parse( scene, async function( result ) {
+
+        output = JSON.stringify( result, null, 2 );
+        // console.log( out );
+        // console.log( "Success" );
+        const name = document.getElementById("nft-id").value + " " + document.getElementById("nft-collection-name").value
+    
+        const modelFile = new Moralis.File(name + "-model.json",  {base64 : btoa(output)});
+        document.getElementById('mint').setAttribute("disabled", null);
+
+        await modelFile.saveIPFS();
+        const modelURI = modelFile.ipfs();
+        
+        console.log(attributes);
+        const metadata = {
+            "name": name,
+            "attributes" : attributes,
+            "model": modelURI
+        }
+        const metadataFile = new Moralis.File("metadata.json", {base64 : btoa(JSON.stringify(metadata))});
+        await metadataFile.saveIPFS();
+        const metadataURI = metadataFile.ipfs();
+        const txt = await mintToken(metadataURI).then(notify)
+
+    });
+
+
 }
 
 async function mintToken(_uri){
@@ -108,7 +122,7 @@ async function mintToken(_uri){
   
 async function notify(_txt){
     document.getElementById("resultSpace").innerHTML =  
-    `<input disabled = "true" id="result" type="text" class="form-control" placeholder="Description" aria-label="URL" aria-describedby="basic-addon1" value="Your NFT was minted in transaction ${_txt}">`;
+    `<div class="alert alert-info mt-2" role="alert"> Your NFT was minted in transaction ${_txt}"</div>`;
 } 
 
 async function getNFTs() {

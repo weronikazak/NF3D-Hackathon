@@ -48,7 +48,6 @@ function loadModel(collection, attributes) {
         if (key == "Background") continue;
     
         const loader = new THREE.GLTFLoader();
-    
             
         if (key == "Fur") {
             loader.load( 'models/'+ collection + "/Body/model.gltf", function ( gltf ) {
@@ -77,54 +76,7 @@ function loadModel(collection, attributes) {
             } );
         }
      };
-    // for (var i = 0; i < attributes.length; i++) {
-    //     var attr = attributes[i];
-    //     if (attr[0] == "Background") continue;
 
-    //     const loader = new THREE.GLTFLoader();
-
-    //     var fur_colour;
-        
-    //     if (attr[0] == "Fur") {
-    //         fur_colour = attr[1];
-
-    //         loader.load( 'models/'+ collection + "/Body/model.gltf", function ( gltf ) {
-    //             var newMaterial = new THREE.MeshStandardMaterial({color: COLOR_HEX[fur_colour]});
-    //             gltf.scene.children[0].children[0].material = newMaterial;
-    //             gltf.scene.children[0].children[2].material = newMaterial;
-
-
-    //             scene.add( gltf.scene );
-    //         }, undefined, function ( error ) {
-    //             console.error( error );
-    //         } );
-    //     } else if (attr[0] == "Mouth") {
-    //         loader.load( 'models/'+ collection + "/Body/model.gltf", function ( gltf ) {
-    //             var newMaterial = new THREE.MeshStandardMaterial({color: COLOR_HEX[fur_colour]});
-    //             gltf.scene.children[0].children[0].material = newMaterial;
-    //             gltf.scene.children[0].children[2].material = newMaterial;
-
-
-    //             scene.add( gltf.scene );
-    //         }, undefined, function ( error ) {
-    //             console.error( error );
-    //         } );
-    //     } else {
-
-    //         loader.load( 'models/'+ collection + "/" + attr[0] + "/" + attr[1] +'/model.gltf', function ( gltf ) {
-
-                
-
-    //             scene.add( gltf.scene );
-
-    //         }, undefined, function ( error ) {
-    //             console.error( error );
-    //         } );
-    //     }
-        
-    // }
-
-    // document.ge
     recreateScene();
     render();
 
