@@ -87,8 +87,12 @@ async function getNFTs() {
             .then((out) => {
                 // console.log('Output: ', out["image"]);
                 // console.log(html)
-                document.getElementById("nft-gallery").innerHTML += `<img src='` + out["image"] + `' class="img-rounded" width="180px" height="180px">
-                <label>` + out["name"] + `</label> <br>`
+                document.getElementById("nft-gallery").innerHTML += `
+                <div class="btn nft-image">
+                    <img src='` + out["image"] + `' class="img-rounded" width="160px" height="160px">
+                    <label style="color:white">` + out["name"] + `</label> 
+                    <br>
+                <div>`
         }).catch(err => console.error(err));
     }
     document.getElementById("nft-button").style.display = "none";
