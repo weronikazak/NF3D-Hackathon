@@ -13,7 +13,7 @@ var loader = new THREE.GLTFLoader();
 
 loader.load(
     // resource URL
-    'models/gltf/monke/monke.gltf',
+    'models/white_ape/base.gltf',
     // called when the resource is loaded
     function ( gltf ) {
 

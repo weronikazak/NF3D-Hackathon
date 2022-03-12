@@ -39,7 +39,7 @@ body {
 }
 
 .cover-container {
-  max-width: 42em;
+  max-width: 90em;
 }
 
 
@@ -108,24 +108,35 @@ body {
 
 
 
-
-.wrapper {
-    display: flex;
-    align-items: stretch;
+.sidebar {
+  height: 80vh;
 }
 
-#sidebar {
-    min-width: 300px;
-    max-width: 300px;
-    background-color: red;
-    min-height: 86vh;
-    padding: 20px;
-    right: 0;
-    position: relative;
-    left: 45vw;
-    
+#nft-gallery {
+  /* max-height: 80vh; */
+  /* overflow-y: scroll; */
 }
 
-#sidebar.active {
-    /* margin-left: -250px; */
+#nft-gallery img {
+  margin: 20px
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
 }

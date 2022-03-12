@@ -28,18 +28,18 @@ async function logOut() {
 }
 
 async function upload(){
-    const fileInput = document.getElementById("file");
+    const fileInput = document.getElementById("model");
     const data = fileInput.files[0];
     const imageFile = new Moralis.File(data.name, data);
     document.getElementById('upload').setAttribute("disabled", null);
-    document.getElementById('file').setAttribute("disabled", null);
-    document.getElementById('name').setAttribute("disabled", null);
-    document.getElementById('description').setAttribute("disabled", null);
+    // document.getElementById('file').setAttribute("disabled", null);
+    // document.getElementById('name').setAttribute("disabled", null);
+    // document.getElementById('description').setAttribute("disabled", null);
     await imageFile.saveIPFS();
     const imageURI = imageFile.ipfs();
     const metadata = {
       "name":document.getElementById("name").value,
-      "description":document.getElementById("description").value,
+    //   "description":document.getElementById("description").value,
       "image":imageURI
     }
     const metadataFile = new Moralis.File("metadata.json", {base64 : btoa(JSON.stringify(metadata))});
@@ -74,4 +74,71 @@ async function notify(_txt){
     document.getElementById("resultSpace").innerHTML =  
     `<input disabled = "true" id="result" type="text" class="form-control" placeholder="Description" aria-label="URL" aria-describedby="basic-addon1" value="Your NFT was minted in transaction ${_txt}">`;
 } 
+
+async function getNFTs() {
+    const testnetNFTs = await Moralis.Web3API.account.getNFTs({ chain: 'rinkeby' });
+
+    // html = "";
+    for (var i = 0; i < testnetNFTs["result"].length; i++) {
+        var token_uri = testnetNFTs["result"][i]["token_uri"]
+        console.log(token_uri)
+        fetch(token_uri)
+        .then(res => res.json())
+            .then((out) => {
+                // console.log('Output: ', out["image"]);
+                // console.log(html)
+                document.getElementById("nft-gallery").innerHTML += `<img src='` + out["image"] + `' class="img-rounded" width="180px" height="180px">
+                <label>` + out["name"] + `</label> <br>`
+        }).catch(err => console.error(err));
+    }
+    document.getElementById("nft-button").style.display = "none";
+    // console.log("HTTTTML" + html)
+    // document.getElementById("nft-gallery").innerHTML =  html;
+}
   
+
+// async function getNFTs(chain, address) {
+//     // get polygon NFTs for address
+//     const options = { chain: chain, address: address };
+
+//     var maxnr = 5;
+//     const nftCount = await Moralis.Web3.getNFTsCount(options);
+//     $("#content").html("<p>Items count: " + nftCount + " (max " + maxnr + " listed)</p>");
+
+//     if (nftCount > 0) {
+//       const allNFTs = await Moralis.Web3.getNFTs(options);
+//       //console.log(allNFTs);
+
+//       allNFTs.forEach( (nft) => {
+//         if (maxnr > 0) {
+//           fetch(fixURL(nft.token_uri))
+//             .then(response => response.json())
+//             .then(data => {
+//               $("#content").html($("#content").html() 
+//                 + "<div><img width='100' align='left' src='" + fixURL(data.image) + "' />"
+//                 + "<h2>" + data.name + "</h2>"
+//                 + "<p>" + data.description + "</p></div><br clear='all' />");
+//             });
+//         }
+//         maxnr--;
+//       });
+//     }
+//   }
+
+//   fixURL = (url) => {
+//     if (url.startsWith("ipfs")) {
+//       return "https://ipfs.moralis.io:2053/ipfs/" + url.split("ipfs://ipfs/")[1];
+//     } else {
+//       return url + "?format=json";
+//     }
+//   }
+
+//   document.getElementById("btnUpdate").onclick = () => {
+//     console.log("Update!");
+//     let chain = $("#chain").val();
+//     let address = $("#address").val();
+//     console.log("Update! chain="+chain+" address="+address);
+//     if (typeof chain !== 'undefined' && typeof address != 'undefined') {
+//       getNFTs(chain, address);
+//     }
+//   }
