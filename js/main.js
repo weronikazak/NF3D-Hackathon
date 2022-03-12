@@ -3,9 +3,42 @@ const appId = "Ncue0wGVF2LAIjbM8bLNNFBQ761S9lOaLVGq3z3b";
 Moralis.start({ serverUrl, appId });
 
 const nft_contract_address = "0xb0Fd53DaE73DD0EDfE5E28ED29a472918eD60931" //NFT Minting Contract Use This One "Batteries Included", code of this contract is in the github repository under contract_base for your reference.
+const ADDRESS_TOKEN = {
+    "Bored Apes": "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
+    "CyberPunks": "0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB",
+    "Cool Cats": "0x1A92f7381B9F03921564a437210bB9396471050C"
+};
+
+const dummyApes = [8658, 6848, 5000, 2531];
 
 const web3 = new Web3(window.ethereum);
 getNFTs();
+
+function getNFTdata(token_address, token_id) {
+    const KEY = "ckey_773ccb8db17c4884a9ff935d884";
+    var metadata = "https://api.covalenthq.com/v1/1/tokens/"+ token_address +"/nft_metadata/" + token_id + "/?quote-currency=USD&format=JSON&key=" + KEY;
+    
+    console.log(metadata);
+    fetch(metadata)
+        .then(res => res.json())
+            .then((out) => {
+                // console.log(out);
+                console.log(out["data"]["items"][0]["nft_data"][0]["external_data"]["attributes"]);
+                // document.getElementById("nft-details").innerHTML += `
+                // <ul class="list-unstyled text-left">
+                //       <li>
+                //           <a href="#"><b>Collection:</b> Bored Apes Club</a>
+                //       </li>
+                //       <li>
+                //           <a href="#"><b>` + out["attributes"] +`</a>
+                //       </li>
+                //       <li>
+                //           <a href="#">Traits</a>
+                //       </li>
+                //   </ul>`;
+                // j++;
+        }).catch(err => console.error(err));
+}
 
 
 /** Add from here down */
@@ -87,13 +120,23 @@ async function getNFTs() {
         "'pink_ape'"
     ];
     
+    var tokenIds = [];
+    var tokenAddresses = [];
     for (var i = 0; i < testnetNFTs["result"].length; i++) {
-        var token_uri = testnetNFTs["result"][i]["token_uri"]
-
+        var token_uri = testnetNFTs["result"][i]["token_uri"];
+        console.log(testnetNFTs["result"][i]);
+        tokenIds.push(testnetNFTs["result"][i]["token_id"]);
+        tokenAddresses.push(testnetNFTs["result"[i]["token_address"]]);
         var j = 0;
         fetch(token_uri)
         .then(res => res.json())
             .then((out) => {
+                // var token_id = tokenIds[j]; <- should be used on a mainnet. For now we'll use dummy data
+                // var token_address = tokenAddresses[j]; <- should be used on a mainnet. For now we'll use dummy data
+                var token_id = dummyApes[j];
+                var token_address = ADDRESS_TOKEN["Bored Apes"];
+                var NFTmetadata = getNFTdata(token_address, token_id);
+
                 document.getElementById("nft-gallery").innerHTML += `
                 <div class="btn nft-image">
                     <img src='` + out["image"] + `' class="img-rounded" 
@@ -103,57 +146,15 @@ async function getNFTs() {
                     <label style="color:white">` + out["name"] + `</label> 
                     <br>
                 <div>`;
+
+                // Should be available on the mainnet
+                // For testing we will do a simulation
+                // if (tokenAddresses[j] == ADDRESS_TOKEN["Bored Apes"]) {
+
+                // }
                 j++;
         }).catch(err => console.error(err));
     }
     document.getElementById("nft-button").style.display = "none";
-    // console.log("HTTTTML" + html)
-    // document.getElementById("nft-gallery").innerHTML =  html;
 }
   
-
-// async function getNFTs(chain, address) {
-//     // get polygon NFTs for address
-//     const options = { chain: chain, address: address };
-
-//     var maxnr = 5;
-//     const nftCount = await Moralis.Web3.getNFTsCount(options);
-//     $("#content").html("<p>Items count: " + nftCount + " (max " + maxnr + " listed)</p>");
-
-//     if (nftCount > 0) {
-//       const allNFTs = await Moralis.Web3.getNFTs(options);
-//       //console.log(allNFTs);
-
-//       allNFTs.forEach( (nft) => {
-//         if (maxnr > 0) {
-//           fetch(fixURL(nft.token_uri))
-//             .then(response => response.json())
-//             .then(data => {
-//               $("#content").html($("#content").html() 
-//                 + "<div><img width='100' align='left' src='" + fixURL(data.image) + "' />"
-//                 + "<h2>" + data.name + "</h2>"
-//                 + "<p>" + data.description + "</p></div><br clear='all' />");
-//             });
-//         }
-//         maxnr--;
-//       });
-//     }
-//   }
-
-//   fixURL = (url) => {
-//     if (url.startsWith("ipfs")) {
-//       return "https://ipfs.moralis.io:2053/ipfs/" + url.split("ipfs://ipfs/")[1];
-//     } else {
-//       return url + "?format=json";
-//     }
-//   }
-
-//   document.getElementById("btnUpdate").onclick = () => {
-//     console.log("Update!");
-//     let chain = $("#chain").val();
-//     let address = $("#address").val();
-//     console.log("Update! chain="+chain+" address="+address);
-//     if (typeof chain !== 'undefined' && typeof address != 'undefined') {
-//       getNFTs(chain, address);
-//     }
-//   }

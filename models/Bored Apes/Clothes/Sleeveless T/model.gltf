@@ -1,0 +1,134 @@
+{
+    "asset" : {
+        "copyright" : "Weronika Zak",
+        "generator" : "Khronos glTF Blender I/O v1.7.33",
+        "version" : "2.0"
+    },
+    "scene" : 0,
+    "scenes" : [
+        {
+            "name" : "Scene",
+            "nodes" : [
+                0
+            ]
+        }
+    ],
+    "nodes" : [
+        {
+            "mesh" : 0,
+            "name" : "tshirt",
+            "rotation" : [
+                0.5922437906265259,
+                0,
+                0,
+                0.8057588338851929
+            ],
+            "scale" : [
+                0.2585914134979248,
+                1,
+                1
+            ],
+            "translation" : [
+                0.2887049913406372,
+                -0.0616508424282074,
+                0
+            ]
+        }
+    ],
+    "materials" : [
+        {
+            "doubleSided" : true,
+            "name" : "tshirt",
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.0059253438375890255,
+                    0.0059253438375890255,
+                    0.0059253438375890255,
+                    1
+                ],
+                "metallicFactor" : 0,
+                "roughnessFactor" : 0.5
+            }
+        }
+    ],
+    "meshes" : [
+        {
+            "name" : "Plane.004",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 0,
+                        "NORMAL" : 1,
+                        "TEXCOORD_0" : 2
+                    },
+                    "indices" : 3,
+                    "material" : 0
+                }
+            ]
+        }
+    ],
+    "accessors" : [
+        {
+            "bufferView" : 0,
+            "componentType" : 5126,
+            "count" : 1376,
+            "max" : [
+                0.6234384775161743,
+                0.48492860794067383,
+                0.3194131553173065
+            ],
+            "min" : [
+                -2.8563432693481445,
+                -0.2172604501247406,
+                -0.9840630292892456
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 1,
+            "componentType" : 5126,
+            "count" : 1376,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 2,
+            "componentType" : 5126,
+            "count" : 1376,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 3,
+            "componentType" : 5123,
+            "count" : 2064,
+            "type" : "SCALAR"
+        }
+    ],
+    "bufferViews" : [
+        {
+            "buffer" : 0,
+            "byteLength" : 16512,
+            "byteOffset" : 0
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 16512,
+            "byteOffset" : 16512
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 11008,
+            "byteOffset" : 33024
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 4128,
+            "byteOffset" : 44032
+        }
+    ],
+    "buffers" : [
+        {
+            "byteLength" : 48160,
+            "uri" : "model.bin"
+        }
+    ]
+}
