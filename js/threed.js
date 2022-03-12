@@ -33,13 +33,96 @@ function recreateScene() {
     scene.add( light );
 }
 
-function loadModel(modelName) {
-    const loader = new THREE.GLTFLoader();
-    loader.load( 'models/'+ modelName + '/base.gltf', function ( gltf ) {
-        scene.add( gltf.scene );
-    }, undefined, function ( error ) {
-        console.error( error );
-    } );
+const COLOR_HEX = {
+    "Black": 0x333333,
+    "Pink": 0xF5979E,
+    "Cream": 0xF7F5C9,
+    "Gray": 0x898889
+}
+
+function loadModel(collection, attributes) {
+    var fur_colour = attributes["Fur"];
+    var newMaterial = new THREE.MeshStandardMaterial({color: COLOR_HEX[fur_colour]});
+
+    for (key in attributes) {
+        if (key == "Background") continue;
+    
+        const loader = new THREE.GLTFLoader();
+    
+            
+        if (key == "Fur") {
+            loader.load( 'models/'+ collection + "/Body/model.gltf", function ( gltf ) {
+                gltf.scene.children[0].children[0].material = newMaterial;
+                gltf.scene.children[0].children[2].material = newMaterial;
+
+                scene.add( gltf.scene );
+            }, undefined, function ( error ) {
+                console.error( error );
+            } );
+        } else if (key == "Mouth") {
+            loader.load( 'models/'+ collection + "/" + key + "/" + attributes[key] +"/model.gltf", function ( gltf ) {
+            gltf.scene.children[0].children[2].material = newMaterial;
+
+            scene.add( gltf.scene );
+            }, undefined, function ( error ) {
+                console.error( error );
+            } );
+        } else {
+
+            loader.load( 'models/'+ collection + "/" + key + "/" + attributes[key] +'/model.gltf', function ( gltf ) {
+            scene.add( gltf.scene );
+
+            }, undefined, function ( error ) {
+                console.error( error );
+            } );
+        }
+     };
+    // for (var i = 0; i < attributes.length; i++) {
+    //     var attr = attributes[i];
+    //     if (attr[0] == "Background") continue;
+
+    //     const loader = new THREE.GLTFLoader();
+
+    //     var fur_colour;
+        
+    //     if (attr[0] == "Fur") {
+    //         fur_colour = attr[1];
+
+    //         loader.load( 'models/'+ collection + "/Body/model.gltf", function ( gltf ) {
+    //             var newMaterial = new THREE.MeshStandardMaterial({color: COLOR_HEX[fur_colour]});
+    //             gltf.scene.children[0].children[0].material = newMaterial;
+    //             gltf.scene.children[0].children[2].material = newMaterial;
+
+
+    //             scene.add( gltf.scene );
+    //         }, undefined, function ( error ) {
+    //             console.error( error );
+    //         } );
+    //     } else if (attr[0] == "Mouth") {
+    //         loader.load( 'models/'+ collection + "/Body/model.gltf", function ( gltf ) {
+    //             var newMaterial = new THREE.MeshStandardMaterial({color: COLOR_HEX[fur_colour]});
+    //             gltf.scene.children[0].children[0].material = newMaterial;
+    //             gltf.scene.children[0].children[2].material = newMaterial;
+
+
+    //             scene.add( gltf.scene );
+    //         }, undefined, function ( error ) {
+    //             console.error( error );
+    //         } );
+    //     } else {
+
+    //         loader.load( 'models/'+ collection + "/" + attr[0] + "/" + attr[1] +'/model.gltf', function ( gltf ) {
+
+                
+
+    //             scene.add( gltf.scene );
+
+    //         }, undefined, function ( error ) {
+    //             console.error( error );
+    //         } );
+    //     }
+        
+    // }
 
     // document.ge
     recreateScene();

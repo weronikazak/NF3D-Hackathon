@@ -14,29 +14,30 @@ const dummyApes = [8658, 6848, 5000, 2531];
 const web3 = new Web3(window.ethereum);
 getNFTs();
 
-function getNFTdata(token_address, token_id) {
+function getNFTData(token_address, token_id) {
     const KEY = "ckey_773ccb8db17c4884a9ff935d884";
     var metadata = "https://api.covalenthq.com/v1/1/tokens/"+ token_address +"/nft_metadata/" + token_id + "/?quote-currency=USD&format=JSON&key=" + KEY;
     
-    console.log(metadata);
+    attributes = [];
     fetch(metadata)
         .then(res => res.json())
             .then((out) => {
-                // console.log(out);
-                console.log(out["data"]["items"][0]["nft_data"][0]["external_data"]["attributes"]);
-                // document.getElementById("nft-details").innerHTML += `
-                // <ul class="list-unstyled text-left">
-                //       <li>
-                //           <a href="#"><b>Collection:</b> Bored Apes Club</a>
-                //       </li>
-                //       <li>
-                //           <a href="#"><b>` + out["attributes"] +`</a>
-                //       </li>
-                //       <li>
-                //           <a href="#">Traits</a>
-                //       </li>
-                //   </ul>`;
-                // j++;
+                var attributes_array = out["data"]["items"][0]["nft_data"][0]["external_data"]["attributes"];
+                detail_list = '<ul class="list-unstyled text-left"><li><a href="#"><b>Collection:</b> Bored Apes Club</a></li>';
+
+                for (var i = 0; i < attributes_array.length; i++) {
+                    a = attributes_array[i];
+                    // attributes.push([a["trait_type"], a["value"]]);
+                    attributes[a["trait_type"]] = a["value"];
+
+                    detail_list += '<li><b>'+ a["trait_type"] + ':</b> ' + a["value"] +'</li>'
+                }
+
+                detail_list += '</ul>';
+                
+                document.getElementById("nft-details").innerHTML = detail_list;
+                loadModel("Bored Apes", attributes);
+
         }).catch(err => console.error(err));
 }
 
@@ -124,7 +125,7 @@ async function getNFTs() {
     var tokenAddresses = [];
     for (var i = 0; i < testnetNFTs["result"].length; i++) {
         var token_uri = testnetNFTs["result"][i]["token_uri"];
-        console.log(testnetNFTs["result"][i]);
+        // console.log(testnetNFTs["result"][i]);
         tokenIds.push(testnetNFTs["result"][i]["token_id"]);
         tokenAddresses.push(testnetNFTs["result"[i]["token_address"]]);
         var j = 0;
@@ -135,14 +136,13 @@ async function getNFTs() {
                 // var token_address = tokenAddresses[j]; <- should be used on a mainnet. For now we'll use dummy data
                 var token_id = dummyApes[j];
                 var token_address = ADDRESS_TOKEN["Bored Apes"];
-                var NFTmetadata = getNFTdata(token_address, token_id);
 
                 document.getElementById("nft-gallery").innerHTML += `
                 <div class="btn nft-image">
                     <img src='` + out["image"] + `' class="img-rounded" 
                                                     width="160px"
                                                     height="160px"
-                                                    onclick="loadModel(`+ hardcodedModels[j] +`)">
+                                                    onclick="getNFTData('`+ token_address + "', " + token_id +`)">
                     <label style="color:white">` + out["name"] + `</label> 
                     <br>
                 <div>`;
