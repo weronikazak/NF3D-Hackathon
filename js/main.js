@@ -95,8 +95,6 @@ async function upload(){
         const metadataURI = metadataFile.ipfs();
         const txt = await mintToken(metadataURI).then(notify)
     });
-
-
 }
 
 async function mintToken(_uri){
@@ -126,8 +124,19 @@ async function notify(_txt){
     `<div class="alert alert-info mt-2" role="alert"> Your NFT was minted in transaction ${_txt}"</div>`;
 } 
 
-async function getNFTs() {
+function changeBackground(id) {
     
+    var images = document.getElementsByClassName("nft-image");
+    for (var i = 0; i < images.length; i++) {
+        images.item(i).style.backgroundColor="#333";
+    }
+
+    $("." + id).css("background","#282828")
+    document.getElementById("mint").style.display = "block";
+    document.getElementById("export").style.display = "block";
+}
+
+async function getNFTs() {
     var testnetNFTs;
 
     if (TEST_MODE) {
@@ -156,8 +165,8 @@ async function getNFTs() {
                 }
 
                 document.getElementById("nft-gallery").innerHTML += `
-                <div class="btn nft-image">
-                    <img src='` + out["image"] + `' class="img-rounded" 
+                <div class="btn nft-image rounded token-`+ token_id + `" onclick="changeBackground('token-`+ token_id + `')">
+                    <img src='` + out["image"] + `' class="img-rounded " 
                                                     width="160px"
                                                     height="160px"
                                                     onclick="getNFTData('`+ token_address + "', " + token_id +`)">

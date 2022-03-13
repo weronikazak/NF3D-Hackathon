@@ -45,7 +45,7 @@
           <nav class="nav nav-masthead justify-content-center">
             <div class="form-group pr-4">
               <select class="form-control" id="chain-select" 
-              style="font-weight: bold; color: rgba(255, 255, 255, .5); border-color: #333; background-color: #333;">
+              style="font-weight: bold; color: rgba(255, 255, 255); border-color: #333; background-color: #333;">
                 <option value="eth"><b>Ethereum</b></option>
                 <option value="rinkeby"><b>Rinkeby</b></option>
                 <option value="ropsten">Ropsten</option>
@@ -84,7 +84,13 @@
                 <div id="nft-details"></div>
 
                 <a href="#" class="btn btn-lg btn-secondary"
+                style="padding: 10px 30px; display: none;"
                 id="mint" onclick="upload();">Mint 3D Model</a>
+                <div id="resultSpace">
+
+                  <a href="#" class="btn btn-lg btn-secondary mt-2"
+                  style="display: none; background-color: #333; border-color: white; color: white;"
+                id="export" onclick="exportModel();">Export 3D Model</a>
                 <div id="resultSpace">
                   
                 </div>
@@ -123,6 +129,11 @@
         document.getElementById("nft-gallery").innerHTML = "";
         getNFTs();
     });
+
+    $(".nft-image").on("click", () => {
+      console.log("Aaaaaas")
+      $(this).parent.style.background = "#282828";
+    })
     </script>
     </body>
 </html>
