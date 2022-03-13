@@ -121,8 +121,13 @@ async function mintToken(_uri){
   
 async function notify(_txt){
     document.getElementById("resultSpace").innerHTML =  
-    `<div class="alert alert-info mt-2" role="alert"> Your NFT was minted in transaction ${_txt}"</div>`;
+    `<div class="alert alert-info mt-2" style="word-wrap: break-word" role="alert"> Your NFT was minted in transaction ${_txt}</div>`;
 } 
+
+function exportModel() {
+    // TODO
+    return;
+}
 
 function changeBackground(id) {
     
