@@ -10,6 +10,7 @@ const ADDRESS_TOKEN = {
 };
 
 TEST_MODE = true;
+CURRENT_CHAIN = "eth";
 
 const dummyApes = [8658, 6848, 5000, 2531];
 
@@ -126,12 +127,13 @@ async function notify(_txt){
 } 
 
 async function getNFTs() {
+    
     var testnetNFTs;
 
     if (TEST_MODE) {
         testnetNFTs = await Moralis.Web3API.account.getNFTs({ chain: 'rinkeby', address: '0x1632e60D1c9723cbA5DCD8009A8F25d6e8c00196' });
     } else {
-        testnetNFTs = await Moralis.Web3API.account.getNFTs({ chain: 'eth' });
+        testnetNFTs = await Moralis.Web3API.account.getNFTs({ chain: chain });
     }
     
     var tokenIds = [];

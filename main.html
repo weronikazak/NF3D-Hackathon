@@ -43,6 +43,16 @@
         <div class="inner">
           <h3 class="masthead-brand">NF3D</h3>
           <nav class="nav nav-masthead justify-content-center">
+            <div class="form-group pr-4">
+              <select class="form-control" id="chain-select" 
+              style="font-weight: bold; color: rgba(255, 255, 255, .5); border-color: #333; background-color: #333;">
+                <option value="eth"><b>Ethereum</b></option>
+                <option value="rinkeby"><b>Rinkeby</b></option>
+                <option value="ropsten">Ropsten</option>
+                <option value="polygon">Polygon</option>
+                <option value="optimism">Optymism</option>
+              </select>
+            </div>
             <a class="nav-link" href="https://github.com/weronikazak">Github</a>
             <a class="nav-link" id="btn-logout" onclick="logOut()">Logout</a>
           </nav>
@@ -105,5 +115,14 @@
         </div>
       </footer>
     </div>
+
+    <script>
+    $('#chain-select').on('change', function() {
+        var selected_chain = $(this).find(":selected").val();
+        CURRENT_CHAIN = selected_chain;
+        document.getElementById("nft-gallery").innerHTML = "";
+        getNFTs();
+    });
+    </script>
     </body>
 </html>
