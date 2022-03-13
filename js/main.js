@@ -9,6 +9,8 @@ const ADDRESS_TOKEN = {
     "Cool Cats": "0x1A92f7381B9F03921564a437210bB9396471050C"
 };
 
+TEST_MODE = true;
+
 const dummyApes = [8658, 6848, 5000, 2531];
 
 const web3 = new Web3(window.ethereum);
@@ -31,7 +33,6 @@ function getNFTData(token_address, token_id) {
 
                 for (var i = 0; i < attributes_array.length; i++) {
                     a = attributes_array[i];
-                    // attributes.push([a["trait_type"], a["value"]]);
                     attributes[a["trait_type"]] = a["value"];
 
                     detail_list += '<li><b>'+ a["trait_type"] + ':</b> ' + a["value"] +'</li>'
@@ -58,6 +59,8 @@ async function login() {
         } catch(error) {
             console.log(error)
         }
+    } else {
+        location.href = "main.html";
     }
 }
 
@@ -72,8 +75,6 @@ async function upload(){
     gltfExporter.parse( scene, async function( result ) {
 
         output = JSON.stringify( result, null, 2 );
-        // console.log( out );
-        // console.log( "Success" );
         const name = document.getElementById("nft-id").value + " " + document.getElementById("nft-collection-name").value
     
         const modelFile = new Moralis.File(name + "-model.json",  {base64 : btoa(output)});
@@ -92,7 +93,6 @@ async function upload(){
         await metadataFile.saveIPFS();
         const metadataURI = metadataFile.ipfs();
         const txt = await mintToken(metadataURI).then(notify)
-
     });
 
 
@@ -126,30 +126,32 @@ async function notify(_txt){
 } 
 
 async function getNFTs() {
-    const testnetNFTs = await Moralis.Web3API.account.getNFTs({ chain: 'rinkeby' });
+    var testnetNFTs;
 
-    const hardcodedModels = [
-        "'rebel_ape'",
-        "'white_ape'",
-        "'dress_ape'",
-        "'pink_ape'"
-    ];
+    if (TEST_MODE) {
+        testnetNFTs = await Moralis.Web3API.account.getNFTs({ chain: 'rinkeby', address: '0x1632e60D1c9723cbA5DCD8009A8F25d6e8c00196' });
+    } else {
+        testnetNFTs = await Moralis.Web3API.account.getNFTs({ chain: 'eth' });
+    }
     
     var tokenIds = [];
     var tokenAddresses = [];
     for (var i = 0; i < testnetNFTs["result"].length; i++) {
         var token_uri = testnetNFTs["result"][i]["token_uri"];
-        // console.log(testnetNFTs["result"][i]);
         tokenIds.push(testnetNFTs["result"][i]["token_id"]);
         tokenAddresses.push(testnetNFTs["result"[i]["token_address"]]);
         var j = 0;
         fetch(token_uri)
         .then(res => res.json())
             .then((out) => {
-                // var token_id = tokenIds[j]; <- should be used on a mainnet. For now we'll use dummy data
-                // var token_address = tokenAddresses[j]; <- should be used on a mainnet. For now we'll use dummy data
-                var token_id = dummyApes[j];
-                var token_address = ADDRESS_TOKEN["Bored Apes"];
+                var token_id, token_address;
+                if (TEST_MODE) {
+                    token_id = dummyApes[j];
+                    token_address = ADDRESS_TOKEN["Bored Apes"];
+                } else {
+                    token_id = tokenIds[j];
+                    token_address = tokenAddresses[j];
+                }
 
                 document.getElementById("nft-gallery").innerHTML += `
                 <div class="btn nft-image">
@@ -160,15 +162,8 @@ async function getNFTs() {
                     <label style="color:white">` + out["name"] + `</label> 
                     <br>
                 <div>`;
-
-                // Should be available on the mainnet
-                // For testing we will do a simulation
-                // if (tokenAddresses[j] == ADDRESS_TOKEN["Bored Apes"]) {
-
-                // }
                 j++;
         }).catch(err => console.error(err));
     }
     document.getElementById("nft-button").style.display = "none";
 }
-  
