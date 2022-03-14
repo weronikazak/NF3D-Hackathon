@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/weronikazak/NF3D-Hackathon">
-    <img src="images/log.PNG" alt="Logo" height="100">
+    <img src="images/logo.PNG" alt="Logo" height="100">
   </a>
 
   <p align="center">
