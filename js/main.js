@@ -124,6 +124,8 @@ async function notify(_txt){
     `<div class="alert alert-info mt-2" style="word-wrap: break-word" role="alert"> Your NFT was minted in transaction ${_txt}</div>`;
 } 
 
+
+
 function exportModel() {
     // TODO
     return;
@@ -147,7 +149,12 @@ async function getNFTs() {
     if (TEST_MODE) {
         testnetNFTs = await Moralis.Web3API.account.getNFTs({ chain: 'rinkeby', address: '0x1632e60D1c9723cbA5DCD8009A8F25d6e8c00196' });
     } else {
-        testnetNFTs = await Moralis.Web3API.account.getNFTs({ chain: chain });
+        testnetNFTs = await Moralis.Web3API.account.getNFTs({ chain: CURRENT_CHAIN });
+    }
+
+    if (testnetNFTs["result"].length < 1) {
+        document.getElementById("nft-gallery").innerHTML = "There are no NFTs in your " + CURRENT_CHAIN.toUpperCase() + " wallet!";
+        return;
     }
     
     var tokenIds = [];

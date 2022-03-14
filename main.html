@@ -44,15 +44,18 @@
           <h3 class="masthead-brand" style="text-shadow: 3px -3px 1px #CE0D39, -3px 3px 1px #1E34CE;">NF3D</h3>
           <nav class="nav nav-masthead justify-content-center">
             <div class="form-group pr-4">
+
               <select class="form-control" id="chain-select" 
               style="font-weight: bold; color: rgba(255, 255, 255); border-color: #333; background-color: #333;">
-                <option value="eth"><b>Ethereum</b></option>
+                <option value="eth" selected><b>Ethereum</b></option>
                 <option value="rinkeby"><b>Rinkeby</b></option>
                 <option value="ropsten">Ropsten</option>
                 <option value="polygon">Polygon</option>
                 <option value="optimism">Optymism</option>
               </select>
             </div>
+
+            <a class="nav-link" id="mode-status" onclick="changeTestingMode()">Testing: ON</a>
             <a class="nav-link" href="https://github.com/weronikazak">Github</a>
             <a class="nav-link" id="btn-logout" onclick="logOut()">Logout</a>
           </nav>
@@ -104,7 +107,8 @@
               </div>
 
               <div style="overflow-y: scroll; max-height: 65vh;">
-                <div id="nft-gallery"></div></div>
+                <div id="nft-gallery"></div>
+              </div>
 
               <a href="#" class="btn btn-lg btn-secondary"
                 id="nft-button" onclick="getNFTs();">My NFTs</a>
@@ -131,9 +135,23 @@
     });
 
     $(".nft-image").on("click", () => {
-      console.log("Aaaaaas")
       $(this).parent.style.background = "#282828";
     })
+
+    async function changeTestingMode() {
+      TEST_MODE = !TEST_MODE;
+
+      if (TEST_MODE) {
+          document.getElementById("mode-status").innerHTML = "Testing: ON"
+      } else {
+          document.getElementById("mode-status").innerHTML = "Testing: OFF"
+      }
+      document.getElementById("nft-gallery").innerHTML = "";
+
+      console.log("Changed to ", CURRENT_CHAIN)
+
+      await getNFTs();
+  }
     </script>
     </body>
 </html>
