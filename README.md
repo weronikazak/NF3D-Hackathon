@@ -4,23 +4,28 @@
   </a>
 
   <p align="center">
-    2D to 3D generator for NFTs. Create your own 3D models to use as a game avatar.
+    NFT 2D to 3D generator. Make your own 3D models to be used as game avatars.
     <br />
     <br />
-    <strong>Developed by</strong> 
+    <strong>Developed by
     <a href="https://www.linkedin.com/in/weronikawzak/">Weronika Zak</a> 
     for the 
     <a href="https://buildquest.ethglobal.com/">ETH BuildQuest Hakathon 2022</a>.
+      </strong> 
   </p>
 </p>
 
 ## About the App:
 
-Built on using Moralis boilerplate. The project is based heavily on Bootstrap, Javascript, and foremost 3D manipulating library Three.js. 
-The models were modeled by me in Blender. After logging in using Moralis' authentication services, the user can see a gallery of their all NFTs.
-After clicking on an NFT, the user can see their selected 2D NFT formed into a 3D model (for now only available for some Bored Apes).
-The data about each NFT along with their metadata with unique traits is handled by the Covalent API. 
-After clicking the minting button, the hot wallet message pops up (Metamask). After accepting the transaction, the model's JSON and NFT metadata is being saved to IPFS storage. 
+Built using Moralis Vanilla JS boilerplate. The project is based heavily on **Bootstrap**, **Javascript**, and foremost 3D manipulating library **Three.js**. The models were modelled by me in **Blender**. 
+
+After logging in with **Metamask**, the user  will be able to view a gallery of all of their NFTs.
+The user can see their selected 2D NFT formed into a 3D model after clicking on it (*for now only available for some Bored Apes*).
+
+The **Covalent** along with **NFTPort APIs** handle the data about each NFT, as well as their metadata with unique traits.
+
+
+After clicking the minting button, the hot wallet message pops up. After accepting the transaction, the model is being converted to **JSON** format and NFT metadata is saved to **IPFS** storage.
 
 
 
@@ -54,8 +59,11 @@ After clicking the minting button, the hot wallet message pops up (Metamask). Af
 
 ## Neural Network
 
-As a fun fact, before I came up with an idea to use Covalent API to retrieve traits, I trained a neural network using PyTorch to recognize Apes and get their traits based on just their image. The data was scrapped using Covalent API (for Bored Apes) and NFTPort API (for cryptopunks). 
-It works with 99,99% accuracy and all the (not s clean) code is located in the AI folder.
+Before I thought of using Covalent API to retrieve traits, I trained a neural network in PyTorch to recognise Apes and retrieve their traits based just on their image. 
+
+The data was scrapped using Covalent API and NFTPort API. 
+
+orks with 99.99% accuracy, and all of the (not-so-clean) code is kept in the `AI` folder.
 
 <p align="center">
   <img src="images/Figure_1.png" alt="AI" width="650">
