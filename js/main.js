@@ -2,7 +2,7 @@ const serverUrl = "https://iq57h9s8xwbr.usemoralis.com:2053/server";
 const appId = "Ncue0wGVF2LAIjbM8bLNNFBQ761S9lOaLVGq3z3b";
 Moralis.start({ serverUrl, appId });
 
-const nft_contract_address = "0xb0Fd53DaE73DD0EDfE5E28ED29a472918eD60931" //NFT Minting Contract Use This One "Batteries Included", code of this contract is in the github repository under contract_base for your reference.
+const nft_contract_address = "0x097c1193AF21c3Ce60ECf1D57DA5b440Bca5D402" //NFT Minting Contract Use This One "Batteries Included", code of this contract is in the github repository under contract_base for your reference.
 const ADDRESS_TOKEN = {
     "Bored Apes": "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
     "CyberPunks": "0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB",
@@ -17,13 +17,13 @@ const dummyApes = [8658, 6848, 5000, 2531];
 const web3 = new Web3(window.ethereum);
 getNFTs();
 attributes = [];
-
+NFTName = "";
 
 function getNFTData(token_address, token_id) {
     const KEY = "ckey_773ccb8db17c4884a9ff935d884";
     var metadata = "https://api.covalenthq.com/v1/1/tokens/"+ token_address +"/nft_metadata/" + token_id + "/?quote-currency=USD&format=JSON&key=" + KEY;
     attributes = [];
-    
+    NFTName = "BoredApe" + token_id;
     fetch(metadata)
         .then(res => res.json())
             .then((out) => {
@@ -76,23 +76,26 @@ async function upload(){
     gltfExporter.parse( scene, async function( result ) {
 
         output = JSON.stringify( result, null, 2 );
-        const name = document.getElementById("nft-id").value + " " + document.getElementById("nft-collection-name").value
-    
-        const modelFile = new Moralis.File(name + "-model.json",  {base64 : btoa(output)});
+
+        const modelFile = new Moralis.File(NFTName + "-model.json",  {base64 : btoa(output)});
         document.getElementById('mint').setAttribute("disabled", null);
 
         await modelFile.saveIPFS();
         const modelURI = modelFile.ipfs();
         
-        console.log(attributes);
+        // console.log("Attributes: " + attributes);
         const metadata = {
-            "name": name,
-            "attributes" : attributes,
+            "name": NFTName,
+            // "attributes" : attributes,
             "model": modelURI
         }
-        const metadataFile = new Moralis.File("metadata.json", {base64 : btoa(JSON.stringify(metadata))});
+
+        console.log(modelURI)
+        const metadataFile = new Moralis.File(NFTName + "-metadata.json", {base64 : btoa(JSON.stringify(metadata))});
         await metadataFile.saveIPFS();
         const metadataURI = metadataFile.ipfs();
+        console.log("Metadata URI" + metadataURI)
+
         const txt = await mintToken(metadataURI).then(notify)
     });
 }
@@ -106,6 +109,8 @@ async function mintToken(_uri){
         name: 'tokenURI'
         }]
     }, [_uri]);
+
+    console.log(encodedFunction)
 
     const transactionParameters = {
         to: nft_contract_address,
